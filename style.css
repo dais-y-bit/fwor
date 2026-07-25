@@ -1,0 +1,430 @@
+/* ==========================================================================
+   GEPT 單字卡 — 視覺主題：「卡片盒」
+   設計概念：把整個 App 想像成一盒真實的英文單字索引卡，
+   紙張質感的米杏色底、卡片邊緣有裝訂孔洞與紅色分隔線，
+   翻卡動畫模擬真的把卡片翻過來看背面。
+   ========================================================================== */
+
+:root {
+  --paper: #ECE7DC;
+  --paper-deep: #E1DACB;
+  --card-bg: #FBF9F4;
+  --ink: #2B271F;
+  --ink-soft: #6E6656;
+  --line: #D9D0BC;
+  --moss: #4F6F52;
+  --moss-deep: #3C5640;
+  --clay: #A8452F;
+  --clay-deep: #8A3925;
+  --amber: #B9822A;
+  --amber-deep: #96691E;
+  --dusk: #3E5E86;
+  --dusk-deep: #335072;
+  --hole: #C7BEA8;
+
+  --font-display: "Noto Serif TC", serif;
+  --font-body: "Noto Sans TC", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius-card: 18px;
+  --shadow-card: 0 18px 40px -18px rgba(43, 39, 31, 0.35), 0 2px 6px rgba(43,39,31,0.08);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--paper);
+  background-image:
+    radial-gradient(ellipse at top left, rgba(255,255,255,0.5), transparent 55%),
+    repeating-linear-gradient(0deg, rgba(43,39,31,0.025) 0px, rgba(43,39,31,0.025) 1px, transparent 1px, transparent 34px);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.hidden { display: none !important; }
+
+.screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px 40px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 首頁                                                                     */
+/* ---------------------------------------------------------------------- */
+
+.home-header {
+  text-align: center;
+  max-width: 480px;
+  margin: 24px 0 40px;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 10px;
+}
+
+.home-header h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(36px, 7vw, 52px);
+  margin: 0 0 12px;
+  letter-spacing: 0.02em;
+}
+
+.subtitle {
+  color: var(--ink-soft);
+  font-size: 15px;
+  margin: 0;
+}
+
+.drawer-grid {
+  width: 100%;
+  max-width: 720px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+@media (max-width: 560px) {
+  .drawer-grid { grid-template-columns: 1fr; }
+}
+
+.drawer {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 24px 22px 20px;
+  text-align: left;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.drawer::before {
+  /* 抽屜把手：一條短短的裝訂線裝飾 */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  width: 40px;
+  height: 6px;
+  background: var(--drawer-accent, var(--moss));
+  border-radius: 0 0 4px 4px;
+}
+
+.drawer:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 44px -16px rgba(43, 39, 31, 0.4);
+}
+
+.drawer .drawer-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--drawer-accent, var(--moss));
+}
+
+.drawer h3 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  margin: 0;
+}
+
+.drawer .drawer-meta {
+  color: var(--ink-soft);
+  font-size: 13px;
+  display: flex;
+  gap: 14px;
+}
+
+.drawer .drawer-due {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.drawer .drawer-due.zero { color: var(--ink-soft); font-weight: 400; }
+
+.home-footer {
+  margin-top: 36px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 學習畫面 — 頂部列                                                        */
+/* ---------------------------------------------------------------------- */
+
+.study-topbar {
+  width: 100%;
+  max-width: 480px;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 13px;
+  padding: 6px 4px;
+}
+.btn-ghost:hover { color: var(--ink); }
+
+.tab {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.progress-track {
+  height: 4px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--moss);
+  transition: width 0.25s ease;
+}
+
+.progress-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 翻卡                                                                     */
+/* ---------------------------------------------------------------------- */
+
+.card-stage {
+  perspective: 1600px;
+  width: 100%;
+  max-width: 420px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 36px;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: 60vh;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+  cursor: pointer;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px 28px;
+  gap: 14px;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* 左邊緣一條紅色索引卡邊界線，是整個介面的招牌元素 */
+.card-face::before {
+  content: "";
+  position: absolute;
+  left: 34px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(168, 69, 47, 0.35);
+}
+
+.card-index-hole {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--hole);
+}
+
+.card-pos-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dusk);
+  background: rgba(62, 94, 134, 0.1);
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+
+.card-main-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 7vw, 34px);
+  line-height: 1.35;
+  margin: 0;
+  word-break: break-word;
+}
+
+.card-alias {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0;
+  min-height: 16px;
+}
+
+.card-hint {
+  position: absolute;
+  bottom: 18px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------- */
+/* 四個按鈕                                                                  */
+/* ---------------------------------------------------------------------- */
+
+.answer-bar {
+  width: 100%;
+  max-width: 480px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.ans-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 6px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  box-shadow: 0 8px 18px -8px rgba(0,0,0,0.35);
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.ans-btn:hover { filter: brightness(1.06); }
+.ans-btn:active { transform: translateY(2px); }
+
+.ans-forgot   { background: var(--clay); }
+.ans-retry    { background: var(--amber); }
+.ans-misspell { background: var(--dusk); }
+.ans-know     { background: var(--moss); }
+
+@media (max-width: 420px) {
+  .answer-bar { gap: 8px; }
+  .ans-btn { font-size: 12.5px; padding: 12px 4px; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* 結束畫面                                                                  */
+/* ---------------------------------------------------------------------- */
+
+#screen-done {
+  justify-content: center;
+}
+
+.done-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 44px 36px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+}
+
+.done-card h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  margin: 6px 0 26px;
+}
+
+.done-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.done-stats span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--moss-deep);
+}
+
+.done-stats label {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 10px;
+  padding: 13px 28px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.btn-primary:hover { background: var(--moss-deep); }

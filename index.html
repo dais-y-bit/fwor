@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GEPT 單字卡</title>
+
+<!-- PWA：讓「加入主畫面」後有正確的名稱、圖示、全螢幕顯示 -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4F6F52">
+<link rel="icon" href="icon-192.png">
+
+<!-- iOS 目前不支援 manifest.json 的大部分設定，需要額外這幾個標籤
+     才能讓 Safari「加入主畫面」後：全螢幕、不顯示網址列、用對圖示 -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="單字卡盒">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ 首頁：選模式 ============ -->
+<main id="screen-home" class="screen">
+  <header class="home-header">
+    <p class="eyebrow">GEPT · 中級單字複習</p>
+    <h1>單字卡盒</h1>
+    <p class="subtitle">選一個抽屜，開始今天的複習</p>
+  </header>
+
+  <div class="drawer-grid" id="drawer-grid">
+    <!-- 由 app.js 動態產生四個模式抽屜 -->
+  </div>
+
+  <footer class="home-footer">
+    <p id="total-progress-note"></p>
+  </footer>
+</main>
+
+<!-- ============ 學習畫面：翻卡 ============ -->
+<main id="screen-study" class="screen hidden">
+  <header class="study-topbar">
+    <button id="btn-exit" class="btn-ghost" aria-label="返回抽屜">← 收回抽屜</button>
+    <div class="tab" id="mode-tab">全部</div>
+    <div class="progress-track" aria-hidden="true">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-count" id="progress-count">0 / 0</div>
+  </header>
+
+  <section class="card-stage">
+    <div class="card" id="flash-card">
+      <div class="card-face card-front">
+        <span class="card-index-hole"></span>
+        <span class="card-pos-tag" id="front-pos"></span>
+        <p class="card-main-text" id="front-text"></p>
+        <p class="card-hint">點卡片翻面</p>
+      </div>
+      <div class="card-face card-back">
+        <span class="card-index-hole"></span>
+        <span class="card-pos-tag" id="back-pos"></span>
+        <p class="card-main-text" id="back-text"></p>
+        <p class="card-alias" id="back-alias"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="answer-bar" id="answer-bar">
+    <button class="ans-btn ans-forgot"   data-quality="0">忘了</button>
+    <button class="ans-btn ans-retry"    data-quality="2">再練</button>
+    <button class="ans-btn ans-misspell" data-quality="3">拼錯</button>
+    <button class="ans-btn ans-know"     data-quality="5">會了</button>
+  </section>
+</main>
+
+<!-- ============ 結束畫面：本次複習總結 ============ -->
+<main id="screen-done" class="screen hidden">
+  <div class="done-card">
+    <p class="eyebrow">這疊抽屜複習完了</p>
+    <h2 id="done-headline">做得好</h2>
+    <div class="done-stats">
+      <div><span id="done-total">0</span><label>張卡片</label></div>
+      <div><span id="done-rate">0%</span><label>會了比例</label></div>
+    </div>
+    <button id="btn-back-home" class="btn-primary">回到單字卡盒</button>
+  </div>
+</main>
+
+<script src="words.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
